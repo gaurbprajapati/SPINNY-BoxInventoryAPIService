@@ -1,0 +1,87 @@
+It seems you're encountering an authentication issue. Since you are using Django Rest Framework, you might need to include the authentication credentials in your requests. One common approach is to use Token Authentication.
+
+Here's how you can modify your code to include Token Authentication:
+
+1. **Install DRF Token Authentication:**
+   If you haven't already, install Django Rest Framework's Token Authentication by running:
+   
+   ```
+   pip install djangorestframework
+   ```
+
+2. **Configure Token Authentication:**
+   Add `'rest_framework.authtoken'` to your `INSTALLED_APPS` in your project's `settings.py` file:
+
+   ```python
+   INSTALLED_APPS = [
+       # ...
+       'rest_framework',
+       'rest_framework.authtoken',  # Add this line
+       # ...
+   ]
+   ```
+
+3. **Generate Tokens:**
+   You need to generate tokens for your users. This can be done automatically using DRF's built-in `Token` model:
+
+   ```bash
+   python manage.py migrate
+   python manage.py shell
+   ```
+
+   In the Python shell:
+
+   ```python
+   from django.contrib.auth.models import User
+   from rest_framework.authtoken.models import Token
+   
+   for user in User.objects.all():
+       Token.objects.get_or_create(user=user)
+   ```
+
+4. **Use Token for Authentication:**
+   In your API client (e.g., curl, Postman, etc.), include the token in the `Authorization` header like this:
+
+   ```
+   Authorization: Token <your_token>
+   ```
+
+   Replace `<your_token>` with the actual token value generated for your user.
+
+By following these steps, your requests should include the required token for authentication, and you should be able to access the protected API endpoints without getting the "Authentication credentials were not provided" error.
+
+
+
+
+To get a token for a user in Django Rest Framework's Token Authentication, you need to create or retrieve a token associated with that user. Here's how you can do it:
+
+1. **Using the Django Shell:**
+
+   Run the following commands in your terminal to generate or retrieve a token for a specific user:
+
+   ```bash
+   python manage.py shell
+   ```
+
+   In the Python shell:
+
+   ```python
+   from django.contrib.auth.models import User
+   from rest_framework.authtoken.models import Token
+
+   user = User.objects.get(username='your_username')  # Replace 'your_username' with the actual username
+   token, created = Token.objects.get_or_create(user=user)
+   print(token.key)
+   ```
+
+   This code retrieves the user with the specified username, and if a token doesn't exist for that user, it creates one. The `token.key` attribute contains the actual token value.
+
+2. **Using the API:**
+
+   If you have an endpoint that handles user registration or login, the token might be returned as part of the response. If you're using a package like `dj-rest-auth` or `djoser`, they often provide endpoints for obtaining tokens.
+
+   For example, if you're using `dj-rest-auth`, you can make a POST request to `/dj-rest-auth/token/login/` with the user's credentials in the request body. If successful, the response will contain the token.
+
+   Remember, the method to obtain tokens might vary depending on your specific setup and the authentication packages you're using.
+
+Once you have the token, you can include it in the `Authorization` header of your requests to authenticate yourself for accessing protected API endpoints.
