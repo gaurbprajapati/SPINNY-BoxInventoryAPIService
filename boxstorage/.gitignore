@@ -1,0 +1,11 @@
+*.pyc
+*.py[cod]
+migrations/
+__pycache__/
+locustfile.py
+.idea
+venv/
+static/
+db.sqlite3
+*.log
+.env/
