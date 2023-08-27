@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
-import dj_database_url
 from decouple import config
 
 
@@ -91,13 +90,13 @@ WSGI_APPLICATION = 'boxstorage.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':  os.environ.get('DB_NAME'),  # Database name
-        'USER':  os.environ.get('DB_USER'),  # Database user
+        'NAME': config('DB_NAME', default='testdb_a8e7'),  # Database name
+        'USER': config('DB_USER', default='testdb_a8e7_user'),  # Database user
         # Database password
-        'PASSWORD':  os.environ.get('DB_PASSWORD'),
+        'PASSWORD': config('DB_PASSWORD', default='8EUErMT6EPf6iwkNXyHDGcp0JLdIqJde'),
         # Database host
-        'HOST':  os.environ.get('DB_HOST'),
-        'PORT':  os.environ.get('DB_PORT'),  # Database port
+        'HOST': config('DB_HOST', default='dpg-cjkve57v9s6c73a3i73g-a.oregon-postgres.render.com'),
+        'PORT': config('DB_PORT', default='5432'),  # Database port
     }
 }
 
